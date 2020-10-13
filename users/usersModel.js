@@ -3,7 +3,7 @@ const db = require("../database/connection.js");
 module.exports = {
   add,
   findBy,
-  //   find,
+  getAll,
 };
 
 async function add(creds) {
@@ -18,4 +18,8 @@ async function add(creds) {
 
 function findBy(filter) {
   return db("users as u").where(filter).select("u.*");
+}
+
+function getAll() {
+  return db("users").select("username", "password", "department").orderBy("id");
 }

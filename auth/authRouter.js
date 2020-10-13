@@ -8,6 +8,7 @@ const config = require("../api/config.js");
 const Users = require("../users/usersModel.js");
 const { isValid } = require("../users/usersService.js");
 const { findById } = require("../users/usersModel.js");
+const restricted = require("./restricted.js");
 
 // register
 router.use("/register", (req, res) => {
@@ -59,6 +60,16 @@ router.use("/login", (req, res) => {
         "Please provide username & password. The password should be alphanumeric.",
     });
   }
+});
+
+router.use("/users", restricted, (req, res) => {
+  Users.getAll()
+    .then((users) => {
+      res.status(200).json({ users, jwt: req.jwt });
+    })
+    .catch((err) => {
+      res.status(400).json({ you: "shall not pass!" });
+    });
 });
 
 // get JWT
